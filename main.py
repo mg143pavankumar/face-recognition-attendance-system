@@ -36,24 +36,21 @@ def findEncodings(images):
 
 
 def markAttendance(name):
-    with open('Attendance\Attendance.csv') as f:
+    with open('Attendance\Attendance.csv', 'r+') as f:
         myDataList = f.readlines()
         nameList = []
 
         # print(myDataList)
 
         for line in myDataList:
-            entry = line.split(",")
+            entry = line.split(',')
             nameList.append(entry[0])
 
         if name not in nameList:
             now = datetime.now()
-            dtString = now.strftime('%H:%M:%S')
+            dtString = now.strftime('%I:%M:%S')
+            f.writelines(f'\n{name},{dtString}')
 
-            f.writelines(f'\n{name}, {dtString}')
-
-
-markAttendance('Pavan')
 
 encodeListForKnowFaces = findEncodings(images)
 print("Encoding completed")
@@ -84,7 +81,7 @@ while True:
 
         if matches[matchIndex]:
             name = classNames[matchIndex].upper()
-            print(name)
+            # print(name)
 
             y1, x2, y2, x1 = faceLocation
             y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
@@ -93,6 +90,9 @@ while True:
                           (0, 255, 0), cv2.FILLED)
             cv2.putText(img, name, (x1 + 6, y2 - 6),
                         cv2.FONT_HERSHEY_DUPLEX, 0.7, (255, 255, 255), 1)
+
+            # mark attendance to particular person
+            markAttendance(name)
 
     cv2.imshow('Webcam', img)
     cv2.waitKey(1)
