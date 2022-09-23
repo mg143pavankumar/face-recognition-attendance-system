@@ -104,4 +104,11 @@ while True:
                         cv2.FONT_HERSHEY_DUPLEX, 0.7, (255, 255, 255), 1)
 
     cv2.imshow('Webcam', img)
-    cv2.waitKey(1)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Release handle to the webcam
+
+webCam.release()
+cv2.destroyAllWindows()
